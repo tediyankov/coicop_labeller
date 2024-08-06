@@ -29,10 +29,10 @@ COICOP uses a hierarchical system of categorization. There are 3 levels of categ
 
 ### Dependencies
 
-- OPEN AI API Key: You can obtain an Open AI API Key by following the instructions [here](https://platform.openai.com/docs/overview). 
+- Open AI API Key: You can obtain an Open AI API Key by following the instructions [here](https://platform.openai.com/docs/overview). 
+  - The Open AI API key should be stored in the variable: OPEN_API_KEY = ''. A recommended place to store the API key is in a file `keys.R`. 
 - R + RStudio: The code is run using R and RStudio. You can download both of these [here](https://posit.co/download/rstudio-desktop/). 
 - Download the code using git
-
     ```
     git clone https://github.com/dshuman12/coicop_labeller.git
     ```
@@ -48,6 +48,8 @@ In order to run, there are three required parameters:
 - `product_path`: path to the .csv with the products to label
 - `product_col_name`: name of the column with the product names
 - `product_id_col_name`: name of the column with the unique product ids
+- `gpt_output_file`: *(optional)* path to the .csv with labelled products. Default is set to `<product_path>_output`
+    - if there exists a gpt_output_file already, the `product_id_col_name` and the `product_col_name` need to be in the file. 
 
 ```
 Rscript coicop_labeller.R <product_path> <product_col_name> <product_id_col_name>

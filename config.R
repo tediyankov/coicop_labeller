@@ -1,9 +1,20 @@
-verbose=TRUE
-OPEN_API_KEY = ''
+if (!exists("OPEN_API_KEY")){
+  print("No OPEN_API_KEY exists, searching keys.R")
+  if (!file.exists("keys.R")){
+    stop("No OPEN_API_KEY exists and no file keys.R exists.")
+  } else{
+    source('keys.R')
+  }
+  if (!exists("OPEN_API_KEY") || (exists("OPEN_API_KEY") && OPEN_API_KEY == '')){
+    stop("No OPEN_API_KEY exists in keys.R")
+  }
+}
 
 # -----------
 # GPT Function Defaults
 # -----------
+verbose=TRUE
+
 systeminput <- paste("You are a classifier that needs to classify an inputted revenue stream description as one of many CoiCop labels. These CoiCop labels have 4 levels. For example, Food & Beverage is level 1, Food is level 2, Bread & Cereals is level 3, Cereals is level 4. The format of the label is x.x.x.x, with each x being a level. If it is a general enough category, input 0s for each of the following level labels. The following is a string containing the entire labelling system.", 
                      coicop_labels_str_stripped)
 CHUNK_SIZE = 500

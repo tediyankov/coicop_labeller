@@ -21,27 +21,52 @@ source("config.R")
 
 args <- commandArgs(trailingOnly=TRUE)
 
-err_no_params <- paste0("No parameters were given. This function requires three arguments. \n",
-              "\tfirst argument should be a string specifying the path to the products .csv\n",
+err_missing_args <- paste0("Missing parameters provided. This function requires three arguments. \n",
+              "\tfirst argument should be a string specifying the path to the products CSV\n",
               "\tsecond argument should be a string with the name of the product id column\n",
               "\tthird argument should be a string with the name of the product name column\n",
               "try:\n",
-              "\tRscript prep_model_data.R products.csv product_id product_name")
+              "\tRscript coicop_labeller.R sample.csv index product_name_en")
 
-# Parse arguments
+# Checking for arguments
 if (length(args) < 3){
-  stop(err_no_params)
+  stop(err_missing_args)
 } else if (length(args) == 3){
   product_path <- args[1]
-  product_col_name <- args[2]
-  product_id_col_name <- as.numeric(args[3])
+  product_id_col_name <- args[2]
+  product_col_name <- args[3] 
+} else if (length(args) == 4){
+  product_path <- args[1]
+  product_id_col_name <- args[2]
+  product_col_name <- args[3]
+  gpt_output_file <- args[4]
 } else {
-  stop(err)
+  stop(err_missing_args)
 }
 
-if (is.na(COICOP) || is.na(SAMPLE_FRAC) || is.na(MODEL_SET)) stop(err_no_params)
+if (is.na(product_path) || is.na(product_col_name) || is.na(product_id_col_name)) stop(err_missing_args)
 
-products <- read.csv(product_path)
+if (!grepl("\\.csv$", product_path)) stop("The products file provided is not a .csv")
+
+if (file.exists(product_path)) {
+  products <- read.csv(product_path)
+  missing_columns <- setdiff(c(product_id_col_name, product_col_name), colnames(products))
+  
+  if (length(missing_columns) > 0) {
+    stop(paste("The following columns are missing from the products CSV:", paste(missing_columns, collapse = ", ")))
+  }
+  
+} else {
+  # File does not exist
+  stop(paste("The file at", product_path, "does not exist."))
+}
+
+if (is.na(gpt_output_file) || gpt_output_file == ''){
+  position <- regexpr("\\.csv$", product_path)
+  gpt_output_file <- paste0(substr(product_path, 1, position - 1), "_output.csv")
+  
+  print(paste("Missing GPT Output File. Setting GPT Output File name to", gpt_output_file))
+}
 
 Sys.setenv(
   OPENAI_API_KEY = OPEN_API_KEY
@@ -52,8 +77,8 @@ Sys.setenv(
 #   product_col_name: the name of the product attempting to be classified
 
 coicop_labeller <- function(products,
-                product_col_name,
-                product_id_col_name
+                product_id_col_name,
+                product_col_name
                 ){
   
   execution_times_path <- paste(local_path, "execution_times_per_100k_", OPEN_AI_MODEL, ".csv", sep="")
@@ -104,22 +129,18 @@ coicop_labeller <- function(products,
     lines <- lines[(csv_line + 1):length(lines)]
     temp_file <- tempfile()
     writeLines(lines, temp_file)
-    
+
     txt <- read.csv(temp_file, header = TRUE, stringsAsFactors = FALSE)
     # Removes Whitespace
     txt[] <- lapply(txt, function(x) if(is.character(x)) trimws(x) else x)
-    colnames(txt) <- c("product_id", "coicop.label")
-    colnames(txt)
-    product_id_pattern <- "(Codebook-\\d+)|(^[A-Z]{3}-\\d{4}-[A-Za-z0-9]{6,})$"
+    colnames(txt) <- c(product_id_col_name, "coicop.label")
     code_pattern <- "^\\d{1,2}\\.\\d{1}\\.\\d{1}\\.\\d{1}$"
     
     labelled_by_index <- txt %>%
-      filter(str_detect(product_id, product_id_pattern) & 
-               (str_detect(coicop.label, code_pattern) | 
+      filter(str_detect(coicop.label, code_pattern) | 
                   str_detect(coicop.label, "^\\d{1,2}\\.\\d{1}\\.\\d{1}$") | 
                   str_detect(coicop.label, "^\\d{1,2}\\.\\d{1}$") | 
                   str_detect(coicop.label, "^\\d{1,2}$")
-                )
              ) %>%
       rename(code = coicop.label)
     
@@ -148,14 +169,14 @@ coicop_labeller <- function(products,
       
       shared_cols = intersect(colnames(labelled_data), colnames(newly_labelled_data))
       
-      shared_cols = c("product_id", "coicop_modeled_1", "coicop_modeled_2", "coicop_modeled_3", "coicop_modeled_4")
+      shared_cols = c(product_id_col_name, "coicop_modeled_1", "coicop_modeled_2", "coicop_modeled_3", "coicop_modeled_4")
       
       labelled_data <- predictions_to_numeric(labelled_data)
       newly_labelled_data <- predictions_to_numeric(newly_labelled_data)
       
       # Add newly labelled rows to the existing set of labelled entries. 
-      newly_labelled_data <- rbind(labelled_data %>% select(shared_cols), 
-                                   newly_labelled_data %>% select(shared_cols))
+      newly_labelled_data <- rbind(labelled_data %>% select(all_of(shared_cols)), 
+                                   newly_labelled_data %>% select(all_of(shared_cols)))
     }
     write.csv(newly_labelled_data, gpt_output_file, row.names=FALSE)
   }
@@ -167,11 +188,11 @@ coicop_labeller <- function(products,
     # Only need this to remove rows that have already been labelled by GPT
     if (verbose){print(paste("Existing full GPT output file exists at", gpt_output_file))}
     labelled_data <- read.csv(gpt_output_file) %>% 
-      select(product_id_col_name)
+      select(all_of(product_id_col_name))
     
     # Only process the rows that contain product codes not in the existing file
     products_to_label <- products[!(products[product_id_col_name] %in% labelled_data[product_id_col_name]), ] %>% 
-      select(product_id_col_name, product_col_name)
+      select(all_of(c(product_id_col_name, product_col_name)))
     
   } else {
     if (verbose){
