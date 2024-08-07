@@ -4,86 +4,18 @@ coicop_labels_str_stripped <- "coicop_code description
 <chr>       <chr>                                                                                                  
 01          Food and Non-Alcoholic Beverages                                                                       
 01.1        Food                                                                                                   
-01.1.1      Bread and Cereals                                                                                      
-01.1.1.1    Cereals                                                                                                
-01.1.1.2    Flour of Cereals                                                                                       
-01.1.1.3    Bread and Bakery Products                                                                              
-01.1.1.4    Breakfast Cereals                                                                                      
-01.1.1.5    Macaroni, Noodles, Couscous and Similar Pasta Products                                                 
-01.1.1.9    Other Cereal and Grain Mill Products                                                                   
-01.1.2      Meat                                                                                                   
-01.1.2.1    Live Land Animals                                                                                      
-01.1.2.2    Meat, Fresh, Chilled or Frozen                                                                         
-01.1.2.3    Meat, Dried, Salted in Brine or Smoked                                                                 
-01.1.2.4    Offal, Blood and Other Parts of Slaughtered Animals, Fresh, Chilled or Frozen, Dried, Salted, in Brine…
-01.1.2.5    Meat, Offal, Blood and Other Parts of Slaughtered Animals' Preparations                                
-01.1.3      Fish and Seafood                                                                                       
-01.1.3.1    Fish, Live, Fresh, Chilled or Frozen                                                                   
-01.1.3.2    Fish, Dried, Salted, in Brine or Smoked                                                                
-01.1.3.3    Fish Preparations                                                                                      
-01.1.3.4    Other Seafood, Live, Fresh, Chilled or Frozen                                                          
-01.1.3.5    Other Seafood, Dried, Salted, in Brine or Smoked                                                       
-01.1.3.6    Other Seafood Preparations                                                                             
-01.1.3.7    Livers, Roes and Offal of Fish and Other Seafood in all Forms                                          
-01.1.4      Milk, Cheese and Eggs                                                                                  
-01.1.4.1    Raw and Whole Milk                                                                                     
-01.1.4.2    Skimmed Milk                                                                                           
-01.1.4.3    Other Milk and Cream                                                                                   
-01.1.4.4    Non-Animal Milk                                                                                        
-01.1.4.5    Cheese                                                                                                 
-01.1.4.6    Yogurt and Similar Products                                                                            
-01.1.4.7    Milk-Based Desert and Beverages                                                                        
-01.1.4.8    Eggs                                                                                                   
-01.1.4.9    Other Dairy Products                                                                                   
-01.1.5      Oils and Fats                                                                                          
-01.1.5.1    Vegetable Oils                                                                                         
-01.1.5.2    Butter and Other Fats and Oils Derived from Milk                                                       
-01.1.5.3    Margarine and Similar Preparations                                                                     
-01.1.5.9    Other Animal Oils and Fats                                                                             
-01.1.6      Fruits                                                                                                 
-01.1.6.1    Dates, Figs and Tropical Fruits, Fresh                                                                 
-01.1.6.2    Citrus Fruits, Fresh                                                                                   
-01.1.6.3    Stone Fruits and Pome Fruits, Fresh                                                                    
-01.1.6.4    Berries, Fresh                                                                                         
-01.1.6.5    Other Fruits, Fresh                                                                                    
-01.1.6.6    Frozen Fruit                                                                                           
-01.1.6.7    Fruit, Dried and Dehydrated                                                                            
-01.1.6.8    Nuts, in Shell or Shelled                                                                              
-01.1.6.9    Fruit and Nuts Ground and Other Preparations                                                           
-01.1.7      Vegetables                                                                                             
-01.1.7.1    Leafy or Stem Vegetables, Fresh or Chilled                                                             
-01.1.7.2    Fruit-Bearing Vegetables, Fresh or Chilled                                                             
-01.1.7.3    Green Leguminous Vegetables, Fresh or Chilled                                                          
-01.1.7.4    Other Vegetables, Fresh or Chilled                                                                     
-01.1.7.5    Tubers, Plantains and Cooking Bananas                                                                  
-01.1.7.6    Pulses                                                                                                 
-01.1.7.7    Other Vegetables, Tubers, Plantains and Cooking Bananas, Dried and Dehydrated                          
-01.1.7.8    Vegetables, Tubers, Plantains and Cooking Bananas, Frozen                                              
-01.1.7.9    Vegetables, Tubers, Plantains, Cooking Bananas and Pulses Ground and Other Preparations                
-01.1.8      Sugar, Jam, Honey, Chocolate and Confectionery                                                         
-01.1.8.1    Cane and Beet Sugar                                                                                    
-01.1.8.2    Other Sugar and Sugar Substitutes                                                                      
-01.1.8.3    Jams, Fruit Jellies, Marmalades, Fruit Puree and Pastes, Honey                                         
-01.1.8.4    Nut Puree, Nut Butter and Nut Pastes                                                                   
-01.1.8.5    Chocolate, Cocoa, and Cocoa-Based Food Products                                                        
-01.1.8.6    Ice, Ice Cream and Sorbet                                                                              
-01.1.8.9    Other Sugar Confectionery and Desserts                                                         
-01.1.9      Condiments and Other Food Products                                                                     
-01.1.9.1    Ready-Made Food                                                                                        
-01.1.9.2    Baby Food                                                                                              
-01.1.9.3    Salt, Condiments and Sauces                                                                            
-01.1.9.5    Spices, Culinary Herbs and Seeds                                                                       
-01.1.9.9    Other Food Products                                                                         
+01.1.1      Bread and Cereals                                                                                                                                                       
+01.1.2      Meat                                                                                                                               
+01.1.3      Fish and Seafood                                                                                                                          
+01.1.4      Milk, Cheese and Eggs                                                                                                                                                               
+01.1.5      Oils and Fats                                                                                                                                                                   
+01.1.6      Fruits                                                                                                                                                       
+01.1.7      Vegetables                                                                                                            
+01.1.8      Sugar, Jam, Honey, Chocolate and Confectionery                                                                                                               
+01.1.9      Condiments and Other Food Products                                                                                                                                           
 01.2        Non-Alcoholic Beverages, Tea and Cocoa                                                                 
-01.2.1      Coffee, Tea and Cocoa                                                                                  
-01.2.1.1    Coffee                                                                                                 
-01.2.1.2    Tea                                                                                                    
-01.2.1.3    Cocoa                                                                                                  
-01.2.2      Mineral Waters, Soft Drinks, Fruit and Vegetable Juices                                                
-01.2.2.1    Mineral Waters                                                                                         
-01.2.2.2    Soft Drinks                                                                                            
-01.2.2.3    Fruit and Vegetable Juices                                                                             
-01.2.2.4    Other Non-Alcoholic Drinks                                                                             
+01.2.1      Coffee, Tea and Cocoa                                                                                                                                                                                 
+01.2.2      Mineral Waters, Soft Drinks, Fruit and Vegetable Juices                                                                                                                           
 02          Alcoholic Beverages, Tobacco, and Narcotics                                                            
 02.1        Alcoholic Beverages                                                                                    
 02.1.1      Spirits                                                                                                

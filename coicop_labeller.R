@@ -115,7 +115,6 @@ coicop_labeller <- function(products,
     db$coicop_modeled_1 <- as.numeric(db$coicop_modeled_1)
     db$coicop_modeled_2 <- as.numeric(db$coicop_modeled_2)
     db$coicop_modeled_3 <- as.numeric(db$coicop_modeled_3)
-    db$coicop_modeled_4 <- as.numeric(db$coicop_modeled_4)
     return(db)
   }
   
@@ -153,7 +152,7 @@ coicop_labeller <- function(products,
       ))
     
     labelled_by_index <- separate(labelled_by_index, code, into = c("coicop_modeled_1", "coicop_modeled_2", 
-                                                                    "coicop_modeled_3", "coicop_modeled_4"),
+                                                                    "coicop_modeled_3"),
                                   sep = "\\.", fill = "right", convert = TRUE)
     labelled_by_index <- predictions_to_numeric(labelled_by_index)
     
@@ -169,7 +168,7 @@ coicop_labeller <- function(products,
       
       shared_cols = intersect(colnames(labelled_data), colnames(newly_labelled_data))
       
-      shared_cols = c(product_id_col_name, "coicop_modeled_1", "coicop_modeled_2", "coicop_modeled_3", "coicop_modeled_4")
+      shared_cols = c(product_id_col_name, "coicop_modeled_1", "coicop_modeled_2", "coicop_modeled_3")
       
       labelled_data <- predictions_to_numeric(labelled_data)
       newly_labelled_data <- predictions_to_numeric(newly_labelled_data)
@@ -224,9 +223,12 @@ coicop_labeller <- function(products,
     gen_labels_to_csv(chunk_index)
     if (verbose){print(paste("Execution Time: ", execution_time['elapsed']))}
     if (verbose){print(paste("Updating Files in existing DB for Chunk", chunk_index))}
-    update_labelled_df(chunk_index, execution_time=execution_time['elapsed'])
+    #update_labelled_df(chunk_index, execution_time=execution_time['elapsed'])
   }
 }
 
 # Additional parameters can be set in the config.R file
 coicop_labeller(products, product_id_col_name, product_col_name) 
+
+
+write.csv(select(read.csv('sample_output.csv'), c("index","coicop_modeled_1","coicop_modeled_2","coicop_modeled_3")), "sample_output.csv")
