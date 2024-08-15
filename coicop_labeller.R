@@ -16,7 +16,9 @@ pacman::p_load(dplyr,
                text2vec, 
                tidyr)
 
-source("0_gpt_prep.R")
+options(warn=-1)
+
+source("labels.R")
 source("config.R")
 
 args <- commandArgs(trailingOnly=TRUE)
@@ -65,7 +67,7 @@ if (is.na(gpt_output_file) || gpt_output_file == ''){
   position <- regexpr("\\.csv$", product_path)
   gpt_output_file <- paste0(substr(product_path, 1, position - 1), "_output.csv")
   
-  print(paste("Missing GPT Output File. Setting GPT Output File name to", gpt_output_file))
+  if (verbose){print(paste("Missing GPT Output File. Setting GPT Output File name to", gpt_output_file))}
 }
 
 Sys.setenv(
@@ -156,19 +158,21 @@ coicop_labeller <- function(products,
                                   sep = "\\.", fill = "right", convert = TRUE)
     labelled_by_index <- predictions_to_numeric(labelled_by_index)
     
+    # add the product name
+    labelled_by_index <- labelled_by_index %>% 
+      merge(select(products, c(product_col_name, product_id_col_name)), by = product_id_col_name, all.x = TRUE)
+    
     write.csv(labelled_by_index, paste(local_path, get_file_name(chunk_index), ".csv", sep=""))
   }
   
   update_labelled_df <- function(chunk_index, execution_time=NA) {
     newly_labelled_data <- read.csv(paste(local_path, get_file_name(chunk_index), ".csv", sep=""))
     execution_time_per_100k <- as.numeric(execution_time) / nrow(newly_labelled_data) * 100000
+    shared_cols = c(product_id_col_name, product_col_name, "coicop_modeled_1", "coicop_modeled_2", "coicop_modeled_3")
+    
     if (verbose){print(paste(nrow(newly_labelled_data), "labels were generated out of", CHUNK_SIZE))}
     if(file.exists(gpt_output_file)) {
       labelled_data <- read.csv(gpt_output_file)
-      
-      shared_cols = intersect(colnames(labelled_data), colnames(newly_labelled_data))
-      
-      shared_cols = c(product_id_col_name, "coicop_modeled_1", "coicop_modeled_2", "coicop_modeled_3")
       
       labelled_data <- predictions_to_numeric(labelled_data)
       newly_labelled_data <- predictions_to_numeric(newly_labelled_data)
@@ -177,7 +181,7 @@ coicop_labeller <- function(products,
       newly_labelled_data <- rbind(labelled_data %>% select(all_of(shared_cols)), 
                                    newly_labelled_data %>% select(all_of(shared_cols)))
     }
-    write.csv(newly_labelled_data, gpt_output_file, row.names=FALSE)
+    write.csv(select(newly_labelled_data, shared_cols), gpt_output_file, row.names=FALSE)
   }
   
   products_to_label <- products
@@ -220,15 +224,14 @@ coicop_labeller <- function(products,
     
     if (verbose){print(paste("Generating Labels for Chunk", chunk_index, "of", length(products_to_label_chunked), "chunks of size", CHUNK_SIZE))}
     execution_time <- system.time(generate_labels(chunk_index, products_to_label_chunked))
+    execution_time <- 0
     gen_labels_to_csv(chunk_index)
     if (verbose){print(paste("Execution Time: ", execution_time['elapsed']))}
     if (verbose){print(paste("Updating Files in existing DB for Chunk", chunk_index))}
-    #update_labelled_df(chunk_index, execution_time=execution_time['elapsed'])
+    update_labelled_df(chunk_index, execution_time=execution_time['elapsed'])
+    break
   }
 }
 
 # Additional parameters can be set in the config.R file
 coicop_labeller(products, product_id_col_name, product_col_name) 
-
-
-write.csv(select(read.csv('sample_output.csv'), c("index","coicop_modeled_1","coicop_modeled_2","coicop_modeled_3")), "sample_output.csv")

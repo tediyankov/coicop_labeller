@@ -34,7 +34,7 @@ COICOP uses a hierarchical system of categorization. There are 3 levels of categ
 - R + RStudio: The code is run using R and RStudio. You can download both of these [here](https://posit.co/download/rstudio-desktop/). 
 - Download the code using git
     ```
-    git clone https://github.com/dshuman12/coicop_labeller.git
+    git clone https://github.com/WorldDataLabResearch/coicop_labeller.git
     ```
     or by downloading directly. Hit Code > download .zip. Once the .zip is downloaded, move the .zip into your disired directory and extract zip by rightclicking and hitting extract. 
 
