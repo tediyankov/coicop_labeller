@@ -32,7 +32,8 @@ err_missing_args <- paste0("Missing parameters provided. This function requires 
 
 # Checking for arguments
 if (length(args) < 3){
-  stop(err_missing_args)
+  cat(err_missing_args)
+  quit()
 } else if (length(args) == 3){
   product_path <- args[1]
   product_id_col_name <- args[2]
@@ -43,24 +44,33 @@ if (length(args) < 3){
   product_col_name <- args[3]
   gpt_output_file <- args[4]
 } else {
-  stop(err_missing_args)
+  cat(err_missing_args)
+  quit()
 }
 
-if (is.na(product_path) || is.na(product_col_name) || is.na(product_id_col_name)) stop(err_missing_args)
+if (is.na(product_path) || is.na(product_col_name) || is.na(product_id_col_name)) {
+  cat(err_missing_args)
+  quit()
+}
 
-if (!grepl("\\.csv$", product_path)) stop("The products file provided is not a .csv")
+if (!grepl("\\.csv$", product_path)) {
+  cat("The products file provided is not a .csv")
+  quit()
+}
 
 if (file.exists(product_path)) {
   products <- read.csv(product_path)
   missing_columns <- setdiff(c(product_id_col_name, product_col_name), colnames(products))
   
   if (length(missing_columns) > 0) {
-    stop(paste("The following columns are missing from the products CSV:", paste(missing_columns, collapse = ", ")))
+    cat(paste("The following columns are missing from the products CSV:", paste(missing_columns, collapse = ", ")))
+    quit()
   }
   
 } else {
   # File does not exist
-  stop(paste("The file at", product_path, "does not exist."))
+  cat(paste("The file at", product_path, "does not exist."))
+  quit()
 }
 
 if (is.na(gpt_output_file) || gpt_output_file == ''){
@@ -229,7 +239,6 @@ coicop_labeller <- function(products,
     if (verbose){print(paste("Execution Time: ", execution_time['elapsed']))}
     if (verbose){print(paste("Updating Files in existing DB for Chunk", chunk_index))}
     update_labelled_df(chunk_index, execution_time=execution_time['elapsed'])
-    break
   }
 }
 

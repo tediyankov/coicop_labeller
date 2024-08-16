@@ -1,5 +1,4 @@
 if (!exists("OPEN_API_KEY")){
-  print("No OPEN_API_KEY exists, searching keys.R")
   if (!file.exists("keys.R")){
     stop("No OPEN_API_KEY exists and no file keys.R exists.")
   } else{
