@@ -1,20 +1,4 @@
-pacman::p_load(dplyr,
-               fuzzyjoin,
-               e1071,
-               openai,
-               stringr,
-               worlddataverse,
-               tm,
-               fastNaiveBayes,
-               tidytext,
-               SnowballC,
-               forcats,
-               ggplot2,
-               WeightSVM,
-               caret,
-               superml,
-               text2vec,
-               tidyr)
+pacman::p_load(dplyr, stringr, tidyr, openai, worlddataverse)
 
 options(warn = -1)
 
@@ -179,7 +163,7 @@ coicop_labeller <- function(products,
     labelled_by_index <- labelled_by_index %>%
       merge(select(products, c(product_col_name, product_id_col_name)), by = product_id_col_name, all.x = TRUE)
 
-    write.csv(labelled_by_index, paste(local_path, get_file_name(chunk_index), ".csv", sep = ""))
+    write.csv(labelled_by_index, paste(local_path, get_file_name(chunk_index), ".csv", sep = ""), row.names=FALSE)
   }
 
   update_labelled_df <- function(chunk_index, execution_time = NA) {
