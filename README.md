@@ -1,7 +1,7 @@
 ![wdl](images/wdl_square_logo.png)
 
 # COICOP Labeller
-This algorithm will categorize a set of product names into the UN 2018 standard for [Classification of Individual Consumption According to Purpose (COICOP)](https://unstats.un.org/unsd/classifications/Econ/Download/COICOP_2018_draft_publication.pdf). This algorithm can be used for a variety of purposes incluing ingesting country household expenditure surveys, company production line documents, and more. 
+This algorithm will categorize a set of product names into the UN 2018 standard for [Classification of Individual Consumption According to Purpose (COICOP)](https://unstats.un.org/unsd/classifications/Econ/Download/COICOP_2018_draft_publication.pdf). This algorithm can be used for a variety of purposes including ingesting country household expenditure surveys, company production line documents, and more. 
 
 [World Data Pro](worlddata.pro) uses COICOP Labeller to ingest survey data from over 40 countries to forecast key economic indicators. See [here](worlddata.pro) if World Data Pro fits your enterprise needs. This code is published by [World Data Lab](worlddata.io) (WDL). 
 
